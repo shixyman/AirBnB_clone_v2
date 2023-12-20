@@ -27,3 +27,8 @@ class DBStorage:
 
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
+
+    def new(self, obj):
+        """add a new element in the table
+        """
+        self.__session.add(obj)
