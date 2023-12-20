@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
-import shlex
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -16,21 +15,16 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
-        """
-        dic = {}
-        if cls:
-            dictionary = self.__objects
-            for key in dictionary:
-                partition = key.replace('.', ' ')
-                partition = shlex.split(partition)
-                if (partition[0] == cls.__name__):
-                    dic[key] = self.__objects[key]
-            return (dic)
-        else:
+        """Returns a dictionary of models of one type of class
+        currently in storage"""
+        if cls is None:
             return self.__objects
+        else:
+            temp = {}
+            for key, val in self.__objects.items():
+                if val.__class__ == cls:
+                    temp[key] = val
+            return temp
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -62,20 +56,11 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
-        """serialize the file path to JSON file path
-        """
-        try:
-            with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                for key, value in (json.load(f)).items():
-                    value = eval(value["__class__"])(**value)
-                    self.__objects[key] = value
-        except FileNotFoundError:
-            pass
-
-# hhhhhh
     def delete(self, obj=None):
         """ delete an existing element """
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
-            del self.__objects[key]
+            if key in self.__objects:
+                del self.__objects[key]
+                self.save()
 
