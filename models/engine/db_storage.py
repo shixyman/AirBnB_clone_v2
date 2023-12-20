@@ -37,15 +37,34 @@ class DBStorage:
         """save changes
         """
         self.__session.commit()
+
     def delete(self, obj):
         """delete an element in the table
         """
         self.__session.delete(obj)
 
-    def all(self, cls):
-        """return all elements of a table
+    def all(self, cls=None):
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
         """
-        return self.__session.query(cls).all()
+        dic = {}
+        if cls:
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
+        else:
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
+
 
     def reload(self):
         """reload the tables
