@@ -54,10 +54,6 @@ class BaseModel:
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
-    def save(self):
-        """Updates updated_at with current time when instance is changed"""
-        self.updated_at = datetime.now()
-        models.storage.save()
 
     def to_dict(self):
         """creates dictionary of the class  and returns
