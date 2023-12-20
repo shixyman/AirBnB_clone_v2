@@ -51,6 +51,9 @@ class DBStorage:
         """reload the tables
         """
         Base.metadata.create_all(self.__engine)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
 
     def rollback(self):
         """rollback the changes
