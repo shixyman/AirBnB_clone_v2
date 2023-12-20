@@ -73,6 +73,7 @@ class BaseModel:
             del my_dict['_sa_instance_state']
         return my_dict
 
+
     def delete(self):
         """ delete object
         """
