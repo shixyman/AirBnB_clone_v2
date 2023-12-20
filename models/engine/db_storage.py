@@ -32,3 +32,32 @@ class DBStorage:
         """add a new element in the table
         """
         self.__session.add(obj)
+
+    def save(self):
+        """save changes
+        """
+        self.__session.commit()
+    def delete(self, obj):
+        """delete an element in the table
+        """
+        self.__session.delete(obj)
+
+    def all(self, cls):
+        """return all elements of a table
+        """
+        return self.__session.query(cls).all()
+
+    def reload(self):
+        """reload the tables
+        """
+        Base.metadata.create_all(self.__engine)
+
+    def rollback(self):
+        """rollback the changes
+        """
+        self.__session.rollback()
+
+    def close(self):
+        """close the session
+        """
+        self.__session.close()
